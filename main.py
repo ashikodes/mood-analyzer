@@ -35,14 +35,14 @@ def analyze_mood_openai(thoughts):
         f"- 'primary_emotion': The dominant emotion (e.g., Joy, Anxiety, Frustration, Optimism, etc.).\n"
         f"- 'mood_intensity': A number from 1 to 10 representing emotional intensity.\n"
         f"- 'time_context': Identify whether thoughts are past-focused, present-focused, or future-focused.\n"
-        f"- 'insight': Provide a short, meaningful emotional analysis.\n\n"
+        f"- 'insight': Provide a short, meaningful emotional analysis, addressing the user directly using 'You' (e.g., 'You are experiencing...', 'Your thoughts indicate...').\n\n"
         f"Ensure the response is structured as JSON without any additional text."
     )
 
     response = client.chat.completions.create(
         model="gpt-4-turbo",
         messages=[
-            {"role": "system", "content": "You are an AI that provides structured mood analysis in JSON format."},
+            {"role": "system", "content": "You are an AI that provides structured mood analysis in JSON format, always addressing the user directly."},
             {"role": "user", "content": prompt}
         ],
         max_tokens=300,
