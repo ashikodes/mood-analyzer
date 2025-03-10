@@ -31,26 +31,38 @@ class MoodRequest(BaseModel):
 def analyze_mood_openai(thoughts):
     prompt = (
         f"The user shared these thoughts: {'. '.join(thoughts)}.\n\n"
-        f"Analyze their mood based on these thoughts and provide:\n"
-        f"- **Primary Emotion:** Identify the dominant emotion (e.g., Joy, Anxiety, Frustration, Optimism, etc.).\n"
-        f"- **Mood Intensity:** Rate the intensity on a scale of 1 to 10.\n"
-        f"- **Time Context:** Determine if the thoughts are mostly past-focused, present-focused, or future-focused.\n"
-        f"- **Emotions, Motivations, Suggested Actions:** Provide structured emotional insights."
+        f"Analyze their mood and return the response in JSON format with these keys:\n"
+        f"- 'primary_emotion': The dominant emotion (e.g., Joy, Anxiety, Frustration, Optimism, etc.).\n"
+        f"- 'mood_intensity': A number from 1 to 10 representing emotional intensity.\n"
+        f"- 'time_context': Identify whether thoughts are past-focused, present-focused, or future-focused.\n"
+        f"- 'insight': Provide a short, meaningful emotional analysis.\n\n"
+        f"Ensure the response is structured as JSON without any additional text."
     )
 
     response = client.chat.completions.create(
         model="gpt-4-turbo",
         messages=[
-            {"role": "system", "content": "You are an AI that deeply analyzes emotions and provides structured insights."},
+            {"role": "system", "content": "You are an AI that provides structured mood analysis in JSON format."},
             {"role": "user", "content": prompt}
         ],
         max_tokens=300,
         temperature=0.8
     )
 
-    return response.choices[0].message.content.strip()
+    import json
+    try:
+        mood_data = json.loads(response.choices[0].message.content)
+    except json.JSONDecodeError:
+        mood_data = {"primary_emotion": "Unknown", "mood_intensity": "N/A", "time_context": "N/A", "insight": "Could not process response."}
+
+    return mood_data
 
 @app.post("/analyze-mood")
 def analyze_mood(request: MoodRequest):
-    insight = analyze_mood_openai(request.thoughts)
-    return {"insight": insight}
+    mood_data = analyze_mood_openai(request.thoughts)
+    return {
+        "primary_emotion": mood_data.get("primary_emotion", ""),
+        "mood_intensity": mood_data.get("mood_intensity", ""),
+        "time_context": mood_data.get("time_context", ""),
+        "insight": mood_data.get("insight", "")
+    }
