@@ -37,7 +37,7 @@ def analyze_mood_openai(thoughts):
         f"The user shared these thoughts: {'. '.join(thoughts)}.\n\n"
         f"Analyze their mood and return the response in JSON format with these keys:\n"
         f"- 'primary_emotion': The dominant emotion (e.g., Joy, Anxiety, Frustration, Optimism, etc.).\n"
-        f"- 'mood_intensity': A number from 1 to 10 representing emotional intensity.\n"
+        f"- 'mood_intensity': A number from 1 to 100 representing emotional intensity.\n"
         f"- 'time_context': Identify whether thoughts are past-focused, present-focused, or future-focused.\n"
         f"- 'insight': Provide a short, meaningful emotional analysis, addressing the user directly using 'You' (e.g., 'You are experiencing...', 'Your thoughts indicate...').\n\n"
         f"Ensure the response is structured as JSON without any additional text."
