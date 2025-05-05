@@ -1,0 +1,31 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+.env/
+
+# Docker-related files
+Dockerfile
+docker-compose.yml
+
+# OS / editor / IDE files
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# SQLite DB file if you're using a mounted volume
+data/*.db
+
+# Test output / coverage
+.coverage
+htmlcov/
+*.pytest_cache/
+*.mypy_cache/
